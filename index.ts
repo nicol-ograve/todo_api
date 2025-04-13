@@ -4,6 +4,9 @@ const fastifyPostgres = require("@fastify/postgres");
 // DB plugin
 fastify.register(fastifyPostgres, {
   connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 fastify.get("/todos", async (request: any, reply: any) => {
