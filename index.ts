@@ -13,7 +13,7 @@ fastify.get("/todos", async (request: any, reply: any) => {
   return rows;
 });
 
-fastify.listen({ port: 8080 }, (err: any, address: any) => {
+fastify.listen({ host: "0.0.0.0", port: 8080 }, (err: any, address: any) => {
   if (err) {
     console.error(err);
     process.exit(1);
