@@ -12,7 +12,7 @@ fastify.get("/todos", async (request: any, reply: any) => {
   let query = "SELECT * FROM todos";
   const params = [];
   if (user) {
-    query += " WHERE user = $1";
+    query += ' WHERE "user" = $1';
     params.push(user);
   }
   const { rows } = await client.query(query, params);
