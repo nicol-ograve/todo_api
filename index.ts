@@ -8,16 +8,25 @@ fastify.register(fastifyPostgres, {
 
 fastify.get("/todos", async (request: any, reply: any) => {
   const client = await fastify.pg.connect();
-  const { rows } = await client.query("SELECT * FROM todos");
+  const { user } = request.query;
+  let query = "SELECT * FROM todos";
+  const params = [];
+  if (user) {
+    query += " WHERE user = $1";
+    params.push(user);
+  }
+  const { rows } = await client.query(query, params);
+
   client.release();
   return rows;
 });
 
 fastify.post("/todos", async (request: any, reply: any) => {
   const { id, text } = request.body;
+  const { user } = request.query;
   const { rows } = await fastify.pg.query(
-    "INSERT INTO todos (id, text) VALUES ($1, $2) RETURNING *",
-    [id, text],
+    "INSERT INTO todos (id, text, user) VALUES ($1, $2, $3) RETURNING *",
+    [id, text, user],
   );
   return rows[0];
 });
