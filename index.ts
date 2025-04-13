@@ -25,7 +25,7 @@ fastify.post("/todos", async (request: any, reply: any) => {
   const { id, text } = request.body;
   const { user } = request.query;
   const { rows } = await fastify.pg.query(
-    "INSERT INTO todos (id, text, user) VALUES ($1, $2, $3) RETURNING *",
+    'INSERT INTO todos (id, text, "user") VALUES ($1, $2, $3) RETURNING *',
     [id, text, user],
   );
   return rows[0];
