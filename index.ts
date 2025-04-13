@@ -31,6 +31,24 @@ fastify.post("/todos", async (request: any, reply: any) => {
   return rows[0];
 });
 
+fastify.delete("/todos/:id", async (request: any, reply: any) => {
+  const { id } = request.params;
+  const { rows } = await fastify.pg.query(
+    "DELETE FROM todos WHERE id = $1 RETURNING *",
+    [id],
+  );
+});
+
+fastify.put("/todos/:id", async (request: any, reply: any) => {
+  const { id } = request.params;
+  const { text } = request.body;
+  const { rows } = await fastify.pg.query(
+    "UPDATE todos SET text = $1 WHERE id = $2 RETURNING *",
+    [text, id],
+  );
+  return rows[0];
+});
+
 fastify.listen({ host: "0.0.0.0", port: 8080 }, (err: any, address: any) => {
   if (err) {
     console.error(err);
